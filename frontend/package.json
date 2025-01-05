@@ -1,0 +1,23 @@
+{
+  "name": "clothing-store-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-native": "^0.64.2"
+  },
+  "devDependencies": {
+    "vite": "^2.6.4",
+    "@vitejs/plugin-react": "^1.0.0"
+  },
+  "description": "This is the frontend part of the Clothing Store application built with React Native and Vite.js.",
+  "main": "vite.config.js",
+  "author": "",
+  "license": "ISC"
+}
