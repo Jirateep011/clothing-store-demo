@@ -1,4 +1,4 @@
-// filepath: backend/src/routes/index.js
+// filepath: backend/src/routes/routes.js
 const express = require('express');
 const router = express.Router();
 const clothingController = require('../controllers/clothingItem_controller');
