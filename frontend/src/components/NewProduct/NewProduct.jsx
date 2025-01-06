@@ -1,11 +1,13 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import Modal from '../Modal/Modal';
 
 const NewProduct = ({ clothingItems }) => {
     const carouselRef = useRef(null);
     const isDragging = useRef(false);
     const startX = useRef(0);
     const scrollLeft = useRef(0);
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
     const handlePrevClick = () => {
         if (carouselRef.current) {
@@ -47,6 +49,14 @@ const NewProduct = ({ clothingItems }) => {
         carouselRef.current.scrollLeft = scrollLeft.current - walk;
     };
 
+    const handleItemClick = (item) => {
+        setSelectedProduct(item);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedProduct(null);
+    };
+
     return (
         <div className="container mx-auto mt-8">
             <div className="text-left mb-1">
@@ -67,10 +77,11 @@ const NewProduct = ({ clothingItems }) => {
                     onMouseUp={handleMouseUp}
                     onMouseMove={handleMouseMove}
                 >
-                    {clothingItems.map((item, index) => (
+                    {clothingItems.map((item) => (
                         <div
-                            className="bg-white rounded-lg shadow-lg p-4 sm:p-6 transform transition duration-500 hover:scale-105 w-64 flex-shrink-0 select-none text-center"
+                            className="bg-white rounded-lg shadow-lg p-4 sm:p-6 transform transition duration-500 hover:scale-105 w-64 flex-shrink-0 select-none text-center cursor-pointer"
                             key={item._id}
+                            onClick={() => handleItemClick(item)}
                         >
                             <div className="w-full h-48 sm:h-64 overflow-hidden mb-4">
                                 <img src={item.image} alt={item.name} className="w-full h-full object-cover rounded-t-lg pointer-events-none" />
@@ -88,6 +99,13 @@ const NewProduct = ({ clothingItems }) => {
                     <FaChevronRight />
                 </button>
             </div>
+            {selectedProduct && (
+                <Modal
+                    isOpen={!!selectedProduct}
+                    onClose={handleCloseModal}
+                    product={selectedProduct}
+                />
+            )}
         </div>
     );
 };

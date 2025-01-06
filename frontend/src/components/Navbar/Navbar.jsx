@@ -1,14 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaSearch, FaHeart, FaShoppingCart, FaBars, FaTimes, FaHome, FaStore } from 'react-icons/fa';
+import { UserContext } from '../../context/UserContext';
+import { CartContext } from '../../context/CartContext';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, setUser } = useContext(UserContext);
+  const { cartItems } = useContext(CartContext);
+
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem('user') || localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, [setUser]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   const handleHomeClick = () => {
@@ -20,18 +38,52 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
+  const handleLogout = async () => {
+    try {
+      await axios.post('/api/auth/logout');
+      setUser(null);
+      sessionStorage.removeItem('user');
+      localStorage.removeItem('user');
+      Swal.fire('Success', 'Logged out successfully', 'success');
+      navigate('/');
+      setDropdownOpen(false);
+    } catch (error) {
+      Swal.fire('Error', 'Logout failed', 'error');
+    }
+  };
+
   return (
     <>
       {/* Top Banner */}
       <div className="bg-primary text-white text-sm py-2">
         <div className="container mx-auto flex justify-end space-x-4 px-4">
-          <Link to="/signin" className="hover:underline">Sign In</Link>
-          <Link to="/register" className="hover:underline">Register</Link>
+          {user ? (
+            <div className="relative">
+              <button onClick={toggleDropdown} className="hover:underline">
+                Welcome, {user.username}
+              </button>
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-20 block-container">
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <Link to="/signin" className="hover:underline">Sign In</Link>
+              <Link to="/register" className="hover:underline">Register</Link>
+            </>
+          )}
         </div>
       </div>
 
       {/* Navbar */}
-      <nav className="bg-white shadow-md py-4 sticky top-0 z-50">
+      <nav className={`bg-white shadow-md py-4 sticky top-0 z-50 ${dropdownOpen ? 'mt-16' : ''}`}>
         <div className="container mx-auto flex items-center justify-between px-4">
           {/* Logo */}
           <div className="flex items-center">
@@ -67,7 +119,11 @@ const Navbar = () => {
             </Link>
             <Link to="/cart" className="relative">
               <FaShoppingCart className="text-gray-700 hover:text-primary text-lg md:text-xl" />
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-4 h-4 md:w-5 md:h-5 flex items-center justify-center">3</span>
+              {cartItems.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-4 h-4 md:w-5 md:h-5 flex items-center justify-center">
+                  {cartItems.length}
+                </span>
+              )}
             </Link>
           </div>
         </div>
@@ -96,7 +152,11 @@ const Navbar = () => {
               <FaShoppingCart className="mr-2" />
               <span className="relative">
                 Cart
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">3</span>
+                {cartItems.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">
+                    {cartItems.length}
+                  </span>
+                )}
               </span>
             </Link>
           </div>
