@@ -13,10 +13,10 @@ const FavoritesPage = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {favorites.map((item) => (
-            <div key={item._id} className="bg-white rounded-lg shadow-lg p-4">
+            <div key={item._id} className="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center">
               <img src={item.image} alt={item.name} className="w-full h-48 object-cover rounded-t-lg mb-4" />
               <h2 className="text-lg font-semibold text-gray-700 mb-2">{item.name}</h2>
-              <p className="text-gray-600 mb-4">{item.description}</p>
+              <p className="text-gray-600 mb-4 text-center">{item.description}</p>
               <p className="text-xl font-semibold text-slate-700 mb-4">฿ {item.price}</p>
               <button
                 onClick={() => removeFromFavorites(item._id)}

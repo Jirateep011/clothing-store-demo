@@ -38,6 +38,9 @@ exports.signin = async (req, res) => {
         // Generate token
         const token = jwt.sign({ userId: user._id, email: user.email }, process.env.SECRET_KEY, { expiresIn: '6h' });
 
+        // Log token in terminal
+        console.log(`User ${user.email} signed in with token: ${token}`);
+
         res.status(200).json({ resMsg: responseMessages.USER_LOGGED_IN_SUCCESS, username: user.username, token });
     } catch (error) {
         res.status(400).json({ resMsg: error.message });

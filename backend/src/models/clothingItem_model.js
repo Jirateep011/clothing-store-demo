@@ -19,7 +19,7 @@ const clothingItemSchema = new mongoose.Schema({
     size: {
         type: String,
         required: true,
-        enum: ['S', 'M', 'L', 'XL', 'XXL']
+        default: 'Free size'
     },
     color: {
         type: String,

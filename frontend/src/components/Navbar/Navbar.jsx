@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaSearch, FaHeart, FaShoppingCart, FaBars, FaTimes, FaHome, FaStore } from 'react-icons/fa';
 import { UserContext } from '../../context/UserContext';
 import { CartContext } from '../../context/CartContext';
+import { FavoritesContext } from '../../context/FavoritesContext';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
@@ -13,6 +14,7 @@ const Navbar = () => {
   const location = useLocation();
   const { user, setUser } = useContext(UserContext);
   const { cartItems } = useContext(CartContext);
+  const { favorites } = useContext(FavoritesContext);
 
   useEffect(() => {
     const storedUser = sessionStorage.getItem('user') || localStorage.getItem('user');
@@ -116,6 +118,11 @@ const Navbar = () => {
             </div>
             <Link to="/favorites" className="relative">
               <FaHeart className="text-gray-700 hover:text-primary text-lg md:text-xl" />
+              {favorites.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-4 h-4 md:w-5 md:h-5 flex items-center justify-center">
+                  {favorites.length}
+                </span>
+              )}
             </Link>
             <Link to="/cart" className="relative">
               <FaShoppingCart className="text-gray-700 hover:text-primary text-lg md:text-xl" />
@@ -147,6 +154,11 @@ const Navbar = () => {
             </div>
             <Link to="/favorites" className="text-gray-700 hover:text-primary text-base py-2 flex items-center w-full">
               <FaHeart className="mr-2" /> Favorites
+              {favorites.length > 0 && (
+                <span className="ml-2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">
+                  {favorites.length}
+                </span>
+              )}
             </Link>
             <Link to="/cart" className="text-gray-700 hover:text-primary text-base py-2 flex items-center w-full">
               <FaShoppingCart className="mr-2" />

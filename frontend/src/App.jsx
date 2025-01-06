@@ -5,6 +5,7 @@ import SignInPage from './components/login/SignInPage';
 import RegisterPage from './components/login/RegisterPage';
 import CartPage from './components/Cart/CartPage';
 import FavoritesPage from './components/Favorites/FavoritesPage';
+import ProductDetailPage from './components/Modal/ProductDetailPage';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/favorites" element={<FavoritesPage />} />
+            <Route path="/product/:id" element={<ProductDetailPage />} />
           </Routes>
         </main>
         <Footer />

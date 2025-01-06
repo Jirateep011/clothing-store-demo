@@ -18,7 +18,6 @@ export const CartProvider = ({ children }) => {
               Authorization: `Bearer ${token}`
             }
           });
-          console.log('Fetched cart items:', response.data.items); // Debug log
           setCartItems(response.data.items);
         } catch (error) {
           console.error('Error fetching cart:', error);
@@ -37,7 +36,6 @@ export const CartProvider = ({ children }) => {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log('Added to cart:', response.data.items); // Debug log
       setCartItems(response.data.items);
     } catch (error) {
       console.error('Error adding to cart:', error);
@@ -53,7 +51,6 @@ export const CartProvider = ({ children }) => {
         },
         data: { productId, size }
       });
-      console.log('Removed from cart:', response.data.items); // Debug log
       setCartItems(response.data.items);
     } catch (error) {
       console.error('Error removing from cart:', error);
@@ -68,7 +65,6 @@ export const CartProvider = ({ children }) => {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log('Cleared cart:', response.data.items); // Debug log
       setCartItems(response.data.items);
     } catch (error) {
       console.error('Error clearing cart:', error);
