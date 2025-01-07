@@ -1,6 +1,7 @@
 // filepath: backend/src/middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const User = require('../models/user_model');
 
 dotenv.config();
 
@@ -20,4 +21,16 @@ const isAuthenticated = (req, res, next) => {
     }
 };
 
-module.exports = isAuthenticated;
+const isAdmin = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user.userId);
+        if (user.role !== 'admin') {
+            return res.status(403).json({ message: 'Forbidden: Admins only' });
+        }
+        next();
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { isAuthenticated, isAdmin };

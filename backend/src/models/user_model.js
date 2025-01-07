@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ClothingItem' }]
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ClothingItem' }],
+    role: { type: String, enum: ['user', 'admin'], default: 'user' } // เพิ่ม field role
 });
 
 userSchema.pre('save', async function (next) {

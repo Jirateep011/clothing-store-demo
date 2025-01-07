@@ -5,17 +5,17 @@ const clothingController = require('../controllers/clothingItem_controller');
 const authRoutes = require('./auth_routes');
 const cartController = require('../controllers/cart_controller');
 const favoritesController = require('../controllers/favorites_controller');
-const isAuthenticated = require('../middleware/authMiddleware');
+const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
 
 // Define routes for user authentication
 router.use('/auth', authRoutes);
 
 // Define routes for clothing items
 router.get('/clothing', clothingController.getClothingItems);
-router.post('/clothing', isAuthenticated, clothingController.createClothingItem);
+router.post('/clothing', isAuthenticated, isAdmin, clothingController.createClothingItem); // Add middleware here
 router.get('/clothing/:id', clothingController.getClothingItemById);
-router.put('/clothing/:id', isAuthenticated, clothingController.updateClothingItem);
-router.delete('/clothing/:id', isAuthenticated, clothingController.deleteClothingItem);
+router.put('/clothing/:id', isAuthenticated, isAdmin, clothingController.updateClothingItem);
+router.delete('/clothing/:id', isAuthenticated, isAdmin, clothingController.deleteClothingItem);
 
 // Define routes for cart
 router.get('/cart', isAuthenticated, cartController.getCart);
