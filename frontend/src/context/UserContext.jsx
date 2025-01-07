@@ -13,7 +13,7 @@ export const UserProvider = ({ children }) => {
       const currentTime = new Date().getTime();
       const sixHours = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
       if (currentTime - userData.timestamp < sixHours) {
-        setUser({ username: userData.username });
+        setUser({ username: userData.username, role: userData.role });
       } else {
         localStorage.removeItem('user');
         sessionStorage.removeItem('user');
@@ -23,7 +23,7 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (user) {
-      const userData = { username: user.username, timestamp: new Date().getTime() };
+      const userData = { username: user.username, role: user.role, timestamp: new Date().getTime() };
       if (localStorage.getItem('user')) {
         localStorage.setItem('user', JSON.stringify(userData));
       } else {

@@ -41,7 +41,7 @@ exports.signin = async (req, res) => {
         // Log token in terminal
         console.log(`User ${user.email} signed in with token: ${token}`);
 
-        res.status(200).json({ resMsg: responseMessages.USER_LOGGED_IN_SUCCESS, username: user.username, token });
+        res.status(200).json({ resMsg: responseMessages.USER_LOGGED_IN_SUCCESS, username: user.username, role: user.role, token });
     } catch (error) {
         res.status(400).json({ resMsg: error.message });
     }

@@ -16,8 +16,8 @@ const SignInPage = () => {
     try {
       const response = await axios.post('/api/auth/signin', { email, password });
       Swal.fire('Success', response.data.resMsg, 'success');
-      setUser({ username: response.data.username });
-      const userData = { username: response.data.username, timestamp: new Date().getTime() };
+      setUser({ username: response.data.username, role: response.data.role });
+      const userData = { username: response.data.username, role: response.data.role, timestamp: new Date().getTime() };
       const token = response.data.token;
       if (rememberMe) {
         localStorage.setItem('user', JSON.stringify(userData));
