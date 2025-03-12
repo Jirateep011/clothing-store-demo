@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
       if (currentTime - userData.timestamp < sixHours) {
         setUser({ username: userData.username, role: userData.role });
       } else {
-        localStorage.removeItem('user');
+        localStorage.removeItem('user,');
         sessionStorage.removeItem('user');
       }
     }

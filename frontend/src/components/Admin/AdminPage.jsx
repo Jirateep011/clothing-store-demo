@@ -15,7 +15,7 @@ const AdminPage = () => {
     description: '',
     price: '',
     size: 'Free Size', // Fix size to "Free Size"
-    color: '',
+    colors: [], // Initialize colors as an empty array
     stock: '',
     image: ''
   });
@@ -62,7 +62,7 @@ const AdminPage = () => {
         description: '',
         price: '',
         size: 'Free Size', // Reset size to "Free Size"
-        color: '',
+        colors: [], // Reset colors to an empty array
         stock: '',
         image: ''
       });
@@ -110,7 +110,7 @@ const AdminPage = () => {
         description: '',
         price: '',
         size: 'Free Size', // Reset size to "Free Size"
-        color: '',
+        colors: [], // Reset colors to an empty array
         stock: '',
         image: ''
       });
@@ -129,7 +129,7 @@ const AdminPage = () => {
       description: '',
       price: '',
       size: 'Free Size', // Reset size to "Free Size"
-      color: '',
+      colors: [], // Reset colors to an empty array
       stock: '',
       image: ''
     });

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 const AddToCartPopup = ({ product, onClose, onAddToCart }) => {
   const [quantity, setQuantity] = useState(1);
+  const [selectedColor, setSelectedColor] = useState(product.colors[0]?.name || '');
+  const [selectedColorImage, setSelectedColorImage] = useState(product.colors[0]?.url || product.image);
 
   const handleQuantityChange = (e) => {
     const value = Math.max(1, Math.min(product.stock, Number(e.target.value)));
@@ -9,7 +11,7 @@ const AddToCartPopup = ({ product, onClose, onAddToCart }) => {
   };
 
   const handleAddToCart = () => {
-    onAddToCart(quantity);
+    onAddToCart(quantity, selectedColor, selectedColorImage);
     onClose();
   };
 
@@ -27,6 +29,11 @@ const AddToCartPopup = ({ product, onClose, onAddToCart }) => {
     setQuantity((prevQuantity) => Math.max(1, prevQuantity - 1));
   };
 
+  const handleColorSelect = (color) => {
+    setSelectedColor(color.name);
+    setSelectedColorImage(color.url);
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end md:items-center justify-center z-50" onClick={handleOutsideClick}>
       <div className="bg-white rounded-t-lg md:rounded-lg shadow-lg w-full md:w-2/3 lg:w-1/2 p-6 relative flex flex-col md:flex-row">
@@ -38,13 +45,24 @@ const AddToCartPopup = ({ product, onClose, onAddToCart }) => {
         </button>
         <div className="flex flex-col md:flex-row w-full">
           <div className="w-full md:w-1/3 flex justify-center items-center mb-4 md:mb-0">
-            <img src={product.image} alt={product.name} className="w-full h-full object-contain rounded-lg" />
+            <img src={selectedColorImage} alt={product.name} className="w-full h-full object-contain rounded-lg" />
           </div>
           <div className="w-full md:w-2/3 flex flex-col justify-between px-4">
             <div>
               <h2 className="text-2xl font-bold mb-2">{product.name}</h2>
               <p className="text-xl font-semibold text-slate-700 mb-2">฿ {product.price}</p>
               <p className="text-gray-600 mb-4">Stock: {product.stock}</p>
+              <div className="mb-4 w-full flex justify-center space-x-2">
+                {product.colors.map((color, index) => (
+                  <button
+                    key={index}
+                    className={`py-2 px-4 rounded ${selectedColor === color.name ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700'}`}
+                    onClick={() => handleColorSelect(color)}
+                  >
+                    <img src={color.url} alt={color.name} className="w-8 h-8 rounded-full" />
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="flex justify-end items-center space-x-2 mt-4">
               <button

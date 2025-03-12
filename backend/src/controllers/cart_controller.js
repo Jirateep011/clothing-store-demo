@@ -13,26 +13,23 @@ exports.getCart = async (req, res) => {
 
 exports.addToCart = async (req, res) => {
   try {
-    const { productId, quantity } = req.body;
+    const { productId, quantity, color, colorImage } = req.body;
     const userEmail = req.user.email;
-
-    console.log('Request to add to cart:', { productId, quantity, userEmail });
 
     let cart = await Cart.findOne({ userEmail });
     if (!cart) {
       cart = new Cart({ userEmail, items: [] });
     }
 
-    const existingItem = cart.items.find(item => item.productId.toString() === productId);
+    const existingItem = cart.items.find(item => item.productId.toString() === productId && item.color === color);
     if (existingItem) {
       existingItem.quantity += quantity;
     } else {
-      cart.items.push({ productId, quantity });
+      cart.items.push({ productId, quantity, color, colorImage });
     }
 
     await cart.save();
     const populatedCart = await cart.populate('items.productId').execPopulate();
-    console.log('Cart after adding item:', populatedCart);
     res.status(200).json(populatedCart);
   } catch (error) {
     console.error('Error in addToCart:', error);
@@ -42,13 +39,13 @@ exports.addToCart = async (req, res) => {
 
 exports.removeFromCart = async (req, res) => {
   try {
-    const { productId } = req.body;
+    const { productId, color } = req.body;
     const userEmail = req.user.email;
 
     const cart = await Cart.findOne({ userEmail });
     if (!cart) return res.status(404).json({ message: 'Cart not found' });
 
-    cart.items = cart.items.filter(item => item.productId.toString() !== productId);
+    cart.items = cart.items.filter(item => item.productId.toString() !== productId || item.color !== color);
     await cart.save();
     const populatedCart = await cart.populate('items.productId').execPopulate();
     res.status(200).json(populatedCart);

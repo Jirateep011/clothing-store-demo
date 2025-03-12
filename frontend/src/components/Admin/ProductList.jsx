@@ -12,7 +12,7 @@ const ProductList = ({ products, handleEditProduct, handleDeleteProduct }) => {
             <th className="text-left py-2">Description</th>
             <th className="text-left py-2">Price</th>
             <th className="text-left py-2">Size</th>
-            <th className="text-left py-2">Color</th>
+            <th className="text-left py-2">Colors</th>
             <th className="text-left py-2">Stock</th>
             <th className="text-left py-2">Actions</th>
           </tr>
@@ -27,7 +27,7 @@ const ProductList = ({ products, handleEditProduct, handleDeleteProduct }) => {
               <td className="py-2">{product.description}</td>
               <td className="py-2">฿ {product.price}</td>
               <td className="py-2">{product.size}</td>
-              <td className="py-2">{product.color}</td>
+              <td className="py-2">{product.colors.map(color => color.name).join(', ')}</td>
               <td className="py-2">{product.stock}</td>
               <td className="py-2">
                 <button

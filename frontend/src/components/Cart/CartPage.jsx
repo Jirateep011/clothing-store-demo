@@ -5,8 +5,8 @@ import { CartContext } from '../../context/CartContext';
 const CartPage = () => {
   const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
 
-  const handleRemoveItem = (itemId) => {
-    removeFromCart(itemId);
+  const handleRemoveItem = (productId, color) => {
+    removeFromCart(productId, color);
   };
 
   const handleClearCart = () => {
@@ -32,11 +32,11 @@ const CartPage = () => {
             </thead>
             <tbody>
               {cartItems.map((item) => (
-                <tr key={`${item.productId}-${item.size}`} className="border-t">
+                <tr key={`${item.productId}-${item.color}`} className="border-t">
                   <td className="py-2">
                     <div className="flex items-center">
-                      <img src={item.productId.image} alt={item.productId.name} className="w-16 h-16 object-cover rounded mr-4" />
-                      <span>{item.productId.name}</span>
+                      <img src={item.colorImage || item.productId.image} alt={item.productId.name} className="w-16 h-16 object-cover rounded mr-4" />
+                      <span>{item.productId.name} ({item.color})</span>
                     </div>
                   </td>
                   <td className="py-2">฿ {item.productId.price}</td>
@@ -44,7 +44,7 @@ const CartPage = () => {
                   <td className="py-2">฿ {item.productId.price * item.quantity}</td>
                   <td className="py-2">
                     <button
-                      onClick={() => handleRemoveItem(item.productId)}
+                      onClick={() => handleRemoveItem(item.productId, item.color)}
                       className="text-red-500 hover:text-red-700"
                     >
                       <FaTrashAlt />

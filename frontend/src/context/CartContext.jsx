@@ -28,10 +28,10 @@ export const CartProvider = ({ children }) => {
     fetchCart();
   }, [user]);
 
-  const addToCart = async (item) => {
+  const addToCart = async (product, quantity, color, colorImage) => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-      const response = await axios.post('/api/cart', item, {
+      const response = await axios.post('/api/cart', { productId: product._id, quantity, color, colorImage }, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -42,14 +42,14 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const removeFromCart = async (productId, size) => {
+  const removeFromCart = async (productId, color) => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
       const response = await axios.delete('/api/cart', {
         headers: {
           Authorization: `Bearer ${token}`
         },
-        data: { productId, size }
+        data: { productId, color }
       });
       setCartItems(response.data.items);
     } catch (error) {
@@ -65,7 +65,7 @@ export const CartProvider = ({ children }) => {
           Authorization: `Bearer ${token}`
         }
       });
-      setCartItems(response.data.items);
+      setCartItems([]);
     } catch (error) {
       console.error('Error clearing cart:', error);
     }

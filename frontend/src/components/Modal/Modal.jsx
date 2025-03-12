@@ -13,6 +13,8 @@ const Modal = ({ isOpen, onClose, product }) => {
   const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedColorImage, setSelectedColorImage] = useState(product.image);
 
   useEffect(() => {
     if (favorites.some(fav => fav._id === product._id)) {
@@ -24,12 +26,12 @@ const Modal = ({ isOpen, onClose, product }) => {
 
   if (!isOpen) return null;
 
-  const handleAddToCart = (quantity) => {
+  const handleAddToCart = (quantity, color, colorImage) => {
     if (!user) {
       navigate('/signin');
       return;
     }
-    addToCart({ productId: product._id, quantity });
+    addToCart(product, quantity, color, colorImage);
     setShowPopup(false);
     onClose();
   };
@@ -61,6 +63,11 @@ const Modal = ({ isOpen, onClose, product }) => {
     onClose();
   };
 
+  const handleColorSelect = (color) => {
+    setSelectedColor(color.name);
+    setSelectedColorImage(color.url);
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={handleOutsideClick}>
       <div className="bg-white rounded-lg shadow-lg w-11/12 md:w-2/3 lg:w-1/3 p-6 relative">
@@ -72,7 +79,7 @@ const Modal = ({ isOpen, onClose, product }) => {
         </button>
         <div className="flex flex-col items-center">
           <div className="w-full h-48 md:h-64 lg:h-72 overflow-hidden mb-4">
-            <img src={product.image} alt={product.name} className="w-full h-full object-contain" />
+            <img src={selectedColorImage} alt={product.name} className="w-full h-full object-contain" />
           </div>
           <h2 className="text-2xl font-bold mb-2">{product.name}</h2>
           <p className="text-gray-600 mb-4 text-center">{product.description}</p>
@@ -83,6 +90,17 @@ const Modal = ({ isOpen, onClose, product }) => {
             >
               Free Size
             </button>
+          </div>
+          <div className="mb-4 w-full flex justify-center space-x-2">
+            {product.colors.map((color, index) => (
+              <button
+                key={index}
+                className={`py-2 px-4 rounded ${selectedColor === color.name ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700'}`}
+                onClick={() => handleColorSelect(color)}
+              >
+                <img src={color.url} alt={color.name} className="w-8 h-8 rounded-full" />
+              </button>
+            ))}
           </div>
           <div className="flex flex-col md:flex-row w-full justify-between items-center space-y-2 md:space-y-0 md:space-x-2">
             <button
