@@ -42,6 +42,20 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const updateCartItem = async (productId, color, quantity) => {
+    try {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      const response = await axios.put('/api/cart', { productId, color, quantity }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setCartItems(response.data.items);
+    } catch (error) {
+      console.error('Error updating cart item:', error);
+    }
+  };
+
   const removeFromCart = async (productId, color) => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
@@ -49,7 +63,7 @@ export const CartProvider = ({ children }) => {
         headers: {
           Authorization: `Bearer ${token}`
         },
-        data: { productId, color }
+        data: { productId, color } // Ensure the payload is correctly structured
       });
       setCartItems(response.data.items);
     } catch (error) {
@@ -72,7 +86,7 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, updateCartItem, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );

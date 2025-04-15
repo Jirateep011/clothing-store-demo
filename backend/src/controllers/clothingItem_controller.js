@@ -1,4 +1,5 @@
 const { ClothingItem } = require('../models/clothingItem_model'); // Import the clothing item model
+const Cart = require('../models/cart_model'); // Import the Cart model
 
 // Create a new clothing item
 exports.createClothingItem = async (req, res) => {
@@ -48,6 +49,13 @@ exports.deleteClothingItem = async (req, res) => {
     try {
         const deletedItem = await ClothingItem.findByIdAndDelete(req.params.id);
         if (!deletedItem) return res.status(404).json({ message: 'Item not found' });
+
+        // Remove the deleted item from all carts
+        await Cart.updateMany(
+            {},
+            { $pull: { items: { productId: req.params.id } } }
+        );
+
         res.status(204).send();
     } catch (error) {
         res.status(500).json({ message: error.message });

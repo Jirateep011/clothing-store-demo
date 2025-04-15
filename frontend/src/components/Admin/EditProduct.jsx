@@ -1,6 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const EditProduct = ({ newProduct, handleInputChange, handleUpdateProduct, cancelEdit }) => {
+  const [colorInput, setColorInput] = useState('');
+  const [colorUrlInput, setColorUrlInput] = useState('');
+
+  const handleAddColor = () => {
+    if (colorInput && colorUrlInput && !newProduct.colors.some(color => color.name === colorInput)) {
+      handleInputChange({ target: { name: 'colors', value: [...newProduct.colors, { name: colorInput, url: colorUrlInput }] } });
+      setColorInput('');
+      setColorUrlInput('');
+    }
+  };
+
+  const handleRemoveColor = (colorName) => {
+    handleInputChange({ target: { name: 'colors', value: newProduct.colors.filter(color => color.name !== colorName) } });
+  };
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
       <h2 className="text-2xl font-bold mb-4">Edit Product</h2>
@@ -38,14 +53,33 @@ const EditProduct = ({ newProduct, handleInputChange, handleUpdateProduct, cance
           className="border p-2 rounded"
           readOnly // Make the input read-only
         />
-        <input
-          type="text"
-          name="color"
-          value={newProduct.color}
-          onChange={handleInputChange}
-          placeholder="Color"
-          className="border p-2 rounded"
-        />
+        <div className="col-span-2">
+          <input
+            type="text"
+            value={colorInput}
+            onChange={(e) => setColorInput(e.target.value)}
+            placeholder="Add Color"
+            className="border p-2 rounded mr-2"
+          />
+          <input
+            type="text"
+            value={colorUrlInput}
+            onChange={(e) => setColorUrlInput(e.target.value)}
+            placeholder="Add Color URL"
+            className="border p-2 rounded mr-2"
+          />
+          <button onClick={handleAddColor} className="bg-primary text-white font-bold py-2 px-4 rounded">
+            Add Color
+          </button>
+          <div className="mt-2">
+            {newProduct.colors.map((color, index) => (
+              <span key={index} className="inline-block bg-gray-200 text-gray-700 rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                {color.name}
+                <button onClick={() => handleRemoveColor(color.name)} className="ml-2 text-red-500">x</button>
+              </span>
+            ))}
+          </div>
+        </div>
         <input
           type="number"
           name="stock"

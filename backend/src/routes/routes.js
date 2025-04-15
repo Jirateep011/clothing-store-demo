@@ -22,6 +22,7 @@ router.get('/cart', isAuthenticated, cartController.getCart);
 router.post('/cart', isAuthenticated, cartController.addToCart);
 router.delete('/cart', isAuthenticated, cartController.removeFromCart);
 router.post('/cart/clear', isAuthenticated, cartController.clearCart);
+router.put('/cart', isAuthenticated, cartController.updateCartItem);
 
 // Define routes for favorites
 router.get('/favorites', isAuthenticated, favoritesController.getFavorites);
